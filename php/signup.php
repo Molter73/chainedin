@@ -6,5 +6,7 @@
     * - name
     * - email
     * - pass
+ *
+ * INSERT INTO users (name, email, pass) VALUES (...);
  */
 ?>
