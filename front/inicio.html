@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título.</title>
+    <!-- Links de fuentes de escritura. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Times+New+Roman&display=swap">
+    <link rel="stylesheet" href="botones.css">
+    <style>
+        /* Estilos CSS para centrar el formulario */
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column; /* Alineación vertical */
+            height: 100vh; /* Establece la altura del contenedor */
+        }
+
+        form {
+            text-align: center; /* Centra los elementos del formulario */
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body style="background-color: steelblue;">
+
+    <!-- Formulario Inicio de Sesión. -->
+    <h1 style="font-family: Playfair Display;">Bienvenido a Chainedin.</h1>
+        
+    <div class="center">
+        <form method="post" action="usuario.php">
+            <label style="font-family: Georgia;" for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
+            <label style="font-family: Georgia;" for="contraseña">Contraseña:</label>
+            <input type="password" id="contraseña" name="contraseña" required>
+            
+            <button class="button-6" type="submit">Iniciar sesión.</button>
+        </form>
+        <p style="font-family: Georgia ; font-size:x-small;">¿No estás registrado? Regístrate aquí.</p>
+    </div>
+
+    
+
+</body>
+</html>
+
