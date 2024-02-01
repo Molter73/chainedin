@@ -37,6 +37,8 @@ function login($email, $pass) {
         die("Invalid credentials");
     }
 
+    mysqli_close($conn);
+
     $_SESSION["username"] = $row["name"];
     header("location: html/jobs.html");
     echo "Logged in";
@@ -48,6 +50,7 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $pass = filter_input(INPUT_POST, "pass");
         login($email, $pass);
         break;
+
     default:
         die("Unsopported method");
 }
