@@ -1,9 +1,12 @@
 <?php
+include_once("error.php");
+
+mysqli_report(MYSQLI_REPORT_ERROR);
+
 function db_connect() {
     $db_conf_file = 'db.ini';
     if(!file_exists($db_conf_file)) {
-        error_log("DB configuration not found");
-        return null;
+        internal_error(DATABASE_CONFIGURATION_ERROR, "DB configuration not found");
     }
 
     $db_conf = parse_ini_file($db_conf_file);
@@ -17,8 +20,10 @@ function db_connect() {
     );
 
     if (!$conn) {
-        error_log('Unable to connect to database: ' . mysqli_error());
-        return null;
+        internal_error(
+            DATABASE_CONFIGURATION_ERROR,
+            'Unable to connect to database: ' . mysqli_connect_error()
+        );
     }
 
     return $conn;

@@ -7,52 +7,59 @@
  * - email
  * - pass
  */
+include_once("error.php");
 include_once("db.php");
-
-session_start();
 
 function login($email, $pass) {
     if (is_null($email) || $email === false) {
-        die("Invalid email");
+        bad_request(INVALID_ARGUMENT, "Invalid email");
     }
 
     if (is_null($pass) || $pass === false) {
-        die("Invalid pass");
+        bad_request(INVALID_ARGUMENT, "Invalid pass");
     }
 
     $conn = db_connect();
-    if ($conn == null) {
-        die("Failed to connect to DB");
-    }
 
-    $stmt = mysqli_prepare($conn, "SELECT * FROM users WHERE email=? AND pass=?");
-    mysqli_stmt_bind_param($stmt, "ss", $email, $pass);
+    $stmt = mysqli_prepare($conn, "SELECT name, pass FROM users WHERE email=?");
+    mysqli_stmt_bind_param($stmt, "s", $email);
     if (!mysqli_stmt_execute($stmt)) {
-        die("Failed to execute login query");
+        internal_error(
+            DATABASE_QUERY_ERROR,
+            "Failed to execute login query: " . mysqli_error()
+        );
     }
 
     $res = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_row($res);
-    if ($row == null) {
-        die("Invalid credentials");
+    if (is_null($row)) {
+        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+    }
+
+    if (!password_verify($pass, $row[1])) {
+        unauthorized_access(LOGIN_FAILED, "Invalid password");
     }
 
     mysqli_close($conn);
+    session_start();
 
-    $_SESSION["username"] = $row["name"];
+    $_SESSION["username"] = $row[0];
     header("location: html/jobs.html");
-    echo "Logged in";
+    return json_encode(array(
+        "error" => 0,
+        "msg" => "Logged in",
+    ));
 }
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $pass = filter_input(INPUT_POST, "pass");
-        login($email, $pass);
+        echo login($email, $pass);
         break;
 
     default:
-        die("Unsopported method");
+        unsupported_method();
 }
 
 ?>
