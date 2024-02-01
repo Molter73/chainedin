@@ -16,6 +16,7 @@
 
 include_once("error.php");
 include_once("db.php");
+include_once("session.php");
 
 function get_jobs($count, $page) {
     $offset = $page * $count;
@@ -38,6 +39,7 @@ function get_jobs($count, $page) {
     mysqli_close($conn);
 
     $response = (object) [
+        'error' => 0,
         'metadata' => (object) [
             'page' => $page,
             'entries' => count($rows),
@@ -79,11 +81,7 @@ function add_job($title, $description, $company) {
     ));
 }
 
-session_start();
-
-if (!isset($_SESSION["username"]) || $_SESSION["username"] == "") {
-    unauthorized_access(UNAUTHORIZED_ACCESS, "Unauthorized access");
-}
+validate_session();
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
@@ -107,6 +105,6 @@ switch($_SERVER["REQUEST_METHOD"]) {
         echo add_job($title, $description, $company);
         break;
     default:
-        die('{"error":"Unsopported method"}');
+        unsupported_method();
 }
 ?>
