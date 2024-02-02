@@ -13,8 +13,6 @@ $("#signup").on("submit", function(event) {
             setInterval(function() {
                 $("#error-box").fadeOut()
             }, 2000)
-            console.log("Failure")
-            console.log(data)
         })
     event.preventDefault()
 })

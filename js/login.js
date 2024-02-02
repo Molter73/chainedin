@@ -6,8 +6,12 @@ $("#login").on("submit", function(event) {
             window.location.replace("../html/main.html")
         })
         .fail(function(data) {
-            console.log("Failure")
-            console.log(data)
+            d = data.responseJSON
+            $("#error-msg").text(`Error ${d.error}: ${d.msg}`)
+            $("#error-box").show()
+            setInterval(function() {
+                $("#error-box").fadeOut()
+            }, 2000)
         })
     event.preventDefault()
 })
