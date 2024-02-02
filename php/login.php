@@ -52,6 +52,8 @@ function login($email, $pass) {
     ));
 }
 
+header("Content-Type: application/json");
+
 switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);

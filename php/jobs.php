@@ -81,6 +81,7 @@ function add_job($title, $description, $company) {
     ));
 }
 
+header("Content-Type: application/json");
 validate_session();
 
 switch($_SERVER["REQUEST_METHOD"]) {
