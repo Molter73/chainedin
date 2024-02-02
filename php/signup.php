@@ -44,11 +44,14 @@ function signup($name, $email, $pass) {
     ));
 }
 
+header("Content-Type: application/json");
+
 switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
         $name = filter_input(INPUT_POST, "name");
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $pass = filter_input(INPUT_POST, "pass");
+
         echo signup($name, $email, $pass);
         break;
 

@@ -88,6 +88,7 @@ function get_applications($user_id, $job_id, $count, $page) {
     ));
 }
 
+header("Content-Type: application/json");
 validate_session();
 
 switch ($_SERVER["REQUEST_METHOD"]) {
