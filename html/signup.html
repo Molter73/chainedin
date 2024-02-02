@@ -13,22 +13,27 @@
 </head>
 
 <body>
-    <!-- Formulario Inicio de Sesión. -->
-    <h1 class="login-title">Bienvenido a Chainedin</h1>
+    <!-- Formulario creación de cuenta. -->
+    <h1 class="login-title">Ingrese sus datos</h1>
+    <dialog id="error-box">
+        <p id="error-msg"></p>
+    </dialog>
     <div class="center">
-        <form id="login">
+        <form id="signup">
             <label class="login-label" for="email">Correo Electrónico:</label>
             <input type="email" id="email" name="email" required>
+            <label class="login-label" for="name">Nombre:</label>
+            <input type="text" id="name" name="name" required>
             <label class="login-label" for="pass">Contraseña:</label>
             <input type="password" id="pass" name="pass" required>
-            <button class="button-6" type="submit">Iniciar sesión.</button>
+            <button class="button-6" type="submit">Subscribirse</button>
         </form>
         <p class="login-subtext">
-            ¿No estás registrado? <a href="../html/signup.html">Regístrate aquí.</a>
+            ¿Ya está registrado? <a href="../html/login.html">Ingrese aquí</a>
         </p>
     </div>
 
-    <script src="../js/login.js"></script>
+    <script src="../js/signup.js"></script>
 </body>
 
 </html>
