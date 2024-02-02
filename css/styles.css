@@ -88,3 +88,49 @@ body {
     color: rgba(0, 0, 0, 0.65);
     transform: translateY(0);
 }
+
+.lista-ofertas {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    border: 1px solid hsl(0, 0%, 11%);
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    color: hsl(0, 0%, 11%);
+}
+
+ul {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    list-style: none;
+}
+
+li {
+    height: 28vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#fetchTrigger {
+    width: 100%;
+    height: 10px;
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    pointer-events: none;
+    background: hsla(1, 0%, 0%, 0.1);
+}

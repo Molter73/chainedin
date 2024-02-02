@@ -1,2 +1,34 @@
-<h1>Success!!</h1>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainedIn - Página principal</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+
+</head>
+
+<template id="plantillaOferta">
+    <div class="plantilla">
+        <h2>Nombre Empresa: <span class="name"></span></h2>
+        <p>Oferta <span class="oferta"></span></p>
+        <p>Detalles adicionales. <span class="detalles"></span></p>
+    </div>
+</template>
+
+<body style="background-color: rgba(255, 250, 240, 0.945);">
+
+    <ul id="listaOfertas" class="lista-ofertas">
+        <li id="loader">Loading...</li>
+        <div aria-hidden="true" id="fetchTrigger">
+        </div>
+
+    </ul>
+
+    <script src="../js/main.js"></script>
+</body>
+
+</html>
 

@@ -3,7 +3,7 @@ $("#login").on("submit", function(event) {
         "email": $("#email").val(),
         "pass": $("#pass").val()
     }, function(data) {
-            window.location.replace("../html/main.html")
+            window.location.href = "../index.html"
         })
         .fail(function(data) {
             d = data.responseJSON

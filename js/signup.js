@@ -4,7 +4,7 @@ $("#signup").on("submit", function(event) {
         "pass": $("#pass").val(),
         "name": $("#name").val(),
     }, function(data) {
-            window.location.replace("../html/main.html")
+            window.location.href = "../index.html"
         })
         .fail(function(data) {
             d = data.responseJSON
