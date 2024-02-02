@@ -9,6 +9,7 @@
  */
 include_once("error.php");
 include_once("db.php");
+include_once("session.php");
 
 function login($email, $pass) {
     if (is_null($email) || $email === false) {
@@ -45,7 +46,6 @@ function login($email, $pass) {
 
     $_SESSION["username"] = $row[0];
     $_SESSION["user_id"] = $row[2];
-    header("location: html/jobs.html");
     return json_encode(array(
         "error" => 0,
         "msg" => "Logged in",
@@ -54,9 +54,18 @@ function login($email, $pass) {
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
+        var_dump($_POST);
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $pass = filter_input(INPUT_POST, "pass");
         echo login($email, $pass);
+        break;
+
+    case "GET":
+        validate_session();
+        echo json_encode(array(
+            "error" => 0,
+            "msg" => "Logged in",
+        ));
         break;
 
     default:
