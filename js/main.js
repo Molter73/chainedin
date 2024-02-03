@@ -1,3 +1,5 @@
+const offers_per_page = 20;
+let total_offers = 0;
 let lastFetchedPage = 0;
 let isFetching = false;
 
@@ -10,6 +12,12 @@ function crearOfertaVacia() {
 
 // Función para llenar la lista con ofertas
 async function llenarListaOfertas() {
+    if ((offers_per_page * lastFetchedPage > total_offers) &&
+        lastFetchedPage != 0) {
+        // No hay más ofertas por buscar
+        return;
+    }
+
     const listaOfertas = document.getElementById("listaOfertas");
     let load_msg = document.getElementById("load-msg");
 
@@ -19,11 +27,12 @@ async function llenarListaOfertas() {
 
     const datos = await fetch("../php/jobs.php?" + new URLSearchParams({
         page: lastFetchedPage,
-        count: 20,
+        count: offers_per_page,
     }))
         .then((response) => response.json());
 
     lastFetchedPage++;
+    total_offers = datos.metadata.total_entries;
 
     datos.data.forEach((oferta) => {
         const ofertaVacia = crearOfertaVacia();
