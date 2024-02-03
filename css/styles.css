@@ -26,9 +26,8 @@ body {
     background-color: rgba(255, 250, 240, 0.945);
 }
 
-.login-title {
+.chainedin-title {
     font-family: Playfair Display;
-    margin-bottom: -10px;
     text-decoration: underline blue double;
 }
 
@@ -89,21 +88,22 @@ body {
     transform: translateY(0);
 }
 
+.botonesBottom {
+    margin-top: -430px;
+    margin-bottom: -890px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 5px;
+}
+
 .lista-ofertas {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 
     border: 1px solid hsl(0, 0%, 11%);
-}
-
-html {
-    height: 100%;
-}
-
-body {
-    height: 100%;
-    color: hsl(0, 0%, 11%);
 }
 
 ul {
@@ -133,4 +133,56 @@ li {
 
     pointer-events: none;
     background: hsla(1, 0%, 0%, 0.1);
+}
+
+/* The hero image */
+.hero-image {
+    /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("../assets/Froge.png");
+
+    /* Set a specific height */
+    height: 40%;
+
+    /* Position and center the image to scale nicely on all screens */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+/* Place text in the middle of the image */
+.hero-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
 }

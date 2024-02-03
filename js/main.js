@@ -22,29 +22,29 @@ async function llenarListaOfertas() {
         .then((response) => response.json());
 
     lastFetchedPage++;
-    console.log(datos);
 
     datos.data.forEach((oferta) => {
         const ofertaVacia = crearOfertaVacia();
 
+        plantilla = ofertaVacia.querySelector(".plantilla");
         ofertaVacia.querySelector(".name").textContent = oferta.company;
         ofertaVacia.querySelector(".oferta").textContent = oferta.title;
         ofertaVacia.querySelector(".detalles").textContent = oferta.description;
+        plantilla.setAttribute("id", oferta.id);
+        plantilla.addEventListener("click", (event) => {
+            target = event.target.classList.contains("plantilla") ?
+                event.target : event.target.closest("div")
+
+            // Vamos a la oferta con el id correspondiente
+            window.location.href = "offer.html?" + new URLSearchParams({
+                id: target.id,
+            })
+        });
 
         listaOfertas.insertBefore(ofertaVacia, loader);
     });
 
     isFetching = false;
-}
-
-// Función de devolución de llamada para el observador de intersección
-function callback(entries, observer) {
-    const { isIntersecting } = entries[0];
-
-    if (isIntersecting && !isFetching) {
-        llenarListaOfertas();
-    }
-
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -54,6 +54,12 @@ document.addEventListener("DOMContentLoaded", function() {
         rootMargin: "0px",
         threshold: 0
     };
-    const observer = new IntersectionObserver(callback, options);
+    const observer = new IntersectionObserver((entries, observer) => {
+        const { isIntersecting } = entries[0];
+
+        if (isIntersecting && !isFetching) {
+            llenarListaOfertas();
+        }
+    }, options);
     observer.observe(fetchTrigger);
 });
