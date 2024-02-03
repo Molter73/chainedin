@@ -18,12 +18,32 @@ include_once("error.php");
 include_once("db.php");
 include_once("session.php");
 
+function get_job($id) {
+    $conn = db_connect();
+
+    $stmt = mysqli_prepare($conn, "SELECT * FROM jobs WHERE id=?");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    if (!mysqli_stmt_execute($stmt)) {
+        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+    }
+
+    $res = mysqli_stmt_get_result($stmt);
+    $data = mysqli_fetch_assoc($res);
+
+    mysqli_close($conn);
+
+    return json_encode(array(
+        'error' => 0,
+        'data' => $data,
+    ));
+}
+
 function get_jobs($count, $page) {
     $offset = $page * $count;
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT * FROM jobs ORDER BY creation_date DESC LIMIT ?,?");
+    $stmt = mysqli_prepare($conn, "SELECT id, title, company FROM jobs ORDER BY creation_date DESC LIMIT ?,?");
     mysqli_stmt_bind_param($stmt, "ii", $offset, $count);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
@@ -86,16 +106,22 @@ validate_session();
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
-        $count = filter_input(INPUT_GET, "count", FILTER_VALIDATE_INT, [
-            "options" => [
-                "default" => 20
-        ]]);
-        $page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT, [
-            "options" => [
-                "default" => 0
-        ]]);
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
-        echo get_jobs($count, $page);
+        if (is_null($id)) {
+            $count = filter_input(INPUT_GET, "count", FILTER_VALIDATE_INT, [
+                "options" => [
+                    "default" => 20
+                ]]);
+            $page = filter_input(INPUT_GET, "page", FILTER_VALIDATE_INT, [
+                "options" => [
+                    "default" => 0
+                ]]);
+
+            echo get_jobs($count, $page);
+        } else {
+            echo get_job($id);
+        }
         break;
 
     case "POST":

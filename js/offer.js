@@ -1,25 +1,37 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
+    let params = new URLSearchParams(window.location.search);
+    let id = params.get("id");
 
-    // Selecciona todos los elementos con la clase "accordion"
-    var acc = document.getElementsByClassName("accordion");
+    let response = await fetch("../php/jobs.php?" + new URLSearchParams({
+        id: id,
+    }))
+        .then((response) => response.json());
+    let data = response.data;
 
-    // Recorre todos los elementos y añade un evento de clic a cada uno
-    for (var i = 0; i < acc.length; i++) {
-        acc[i].addEventListener("click", function() {
-            // Alternar la clase "active" para resaltar el botón de acordeón activo
-            this.classList.toggle("active");
+    let name = document.getElementById("nombre-empresa");
+    name.textContent = data.company;
 
-            // Obtén el siguiente elemento hermano del botón de acordeón actual
-            var panel = this.nextElementSibling;
+    let opening = document.getElementById("puesto");
+    opening.textContent = data.title;
 
-            // Si el panel está abierto, ciérralo; de lo contrario, ábrelo
-            if (panel.style.display === "block") {
-                console.log("mierda");
-                panel.style.display = "none";
-            } else {
-                console.log("caca");
-                panel.style.display = "block";
-            }
-        });
-    }
+    let description = document.getElementById("descripcion");
+    description.textContent = data.description;
+
+    let subsciption_button = document.getElementById("subscribe");
+    subsciption_button.addEventListener("click", async function() {
+        let body = new FormData();
+        body.set("job_id", id);
+        let response = await fetch("../php/apply.php",{
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                "job_id": id,
+            }),
+        })
+            .then((response) => response.json());
+        console.log(response);
+    });
 });

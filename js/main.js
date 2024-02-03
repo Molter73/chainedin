@@ -29,7 +29,6 @@ async function llenarListaOfertas() {
         plantilla = ofertaVacia.querySelector(".plantilla");
         ofertaVacia.querySelector(".name").textContent = oferta.company;
         ofertaVacia.querySelector(".oferta").textContent = oferta.title;
-        ofertaVacia.querySelector(".detalles").textContent = oferta.description;
         plantilla.setAttribute("id", oferta.id);
         plantilla.addEventListener("click", (event) => {
             target = event.target.classList.contains("plantilla") ?
