@@ -10,10 +10,12 @@ function crearOfertaVacia() {
 
 // Función para llenar la lista con ofertas
 async function llenarListaOfertas() {
-    const listaOfertas = document.querySelector("#listaOfertas");
-    const loader = document.querySelector("#loader");
+    const listaOfertas = document.getElementById("listaOfertas");
+    let load_msg = document.getElementById("load-msg");
 
     isFetching = true;
+
+    load_msg.style.display = "block";
 
     const datos = await fetch("../php/jobs.php?" + new URLSearchParams({
         page: lastFetchedPage,
@@ -40,19 +42,20 @@ async function llenarListaOfertas() {
             })
         });
 
-        listaOfertas.insertBefore(ofertaVacia, loader);
+        listaOfertas.append(ofertaVacia);
     });
 
+    load_msg.style.display = "none";
     isFetching = false;
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const fetchTrigger = document.querySelector("#fetchTrigger");
-
+    const fetchTrigger = document.getElementById("fetchTrigger");
     const options = {
         rootMargin: "0px",
         threshold: 0
     };
+
     const observer = new IntersectionObserver((entries, observer) => {
         const { isIntersecting } = entries[0];
 

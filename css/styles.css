@@ -11,18 +11,6 @@ body {
     font-size: small;
 }
 
-#fetchTrigger {
-    width: 100%;
-    height: 10px;
-
-    position: absolute;
-    left: 0;
-    bottom: 0;
-
-    pointer-events: none;
-    background: hsla(1, 0%, 0%, 0.1);
-}
-
 /* The hero image */
 .hero-image {
     /* Use "linear-gradient" to add a darken background effect to the image (photographer.jpg). This will make the text easier to read */
