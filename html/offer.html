@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plantilla.</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Times+New+Roman&display=swap">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
@@ -15,27 +15,17 @@
         <h1 class="chainedin-title">Chainedin</h1>
     </div>
 
-    <div class="hero-image">
-        <div class="hero-text">
-            <h1 id="nombre-empresa" class="nombreEmpresa">Nombre de la empresa.</h1>
-            <p id="puesto" class="puesto">Puesto ofrecido.</p>
-        </div>
-    </div>
-
-    <div id="descripcion">
-        <p>Lorem ipsum......</p>
-    </div>
-
-    <div class="botonesBottom">
-        <button id="subscribe" class="botonBottom">Subscribirse</button>
-        <button class="botonBottom">Guardar Oferta</button>
-
-    </div>
-    <div class="botonesBottom">
-        <button class="botonBottom" style="margin-left: -6px;">Volver a ofertas</button>
-
+    <div class="container text-center">
+        <h1 id="puesto">Puesto ofrecido.</h1>
+        <h3 id="nombre-empresa">Nombre de la empresa.</h3>
+        <p id="descripcion">Lorem ipsum......</p>
+        <button id="subscribe" class="btn btn-primary">Subscribirse</button>
+        <button class="btn btn-secondary">Volver a ofertas</button>
     </div>
 
     <script src="../js/offer.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 </body>
 

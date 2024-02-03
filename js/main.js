@@ -26,7 +26,7 @@ async function llenarListaOfertas() {
     datos.data.forEach((oferta) => {
         const ofertaVacia = crearOfertaVacia();
 
-        plantilla = ofertaVacia.querySelector(".plantilla");
+        plantilla = ofertaVacia.querySelector("#plantilla");
         ofertaVacia.querySelector(".name").textContent = oferta.company;
         ofertaVacia.querySelector(".oferta").textContent = oferta.title;
         plantilla.setAttribute("id", oferta.id);
