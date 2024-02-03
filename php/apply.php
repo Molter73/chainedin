@@ -93,7 +93,6 @@ validate_session();
 
 switch ($_SERVER["REQUEST_METHOD"]) {
     case "POST":
-        var_dump($_POST);
         $job_id = filter_input(INPUT_POST, "job_id", FILTER_VALIDATE_INT);
         echo apply($_SESSION["user_id"], $job_id);
         break;

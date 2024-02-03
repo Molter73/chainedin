@@ -1,17 +1,37 @@
-$("#login").on("submit", function(event) {
-    $.post("../php/login.php", {
-        "email": $("#email").val(),
-        "pass": $("#pass").val()
-    }, function(data) {
-            window.location.href = "../index.html"
-        })
-        .fail(function(data) {
-            d = data.responseJSON
-            $("#error-msg").text(`Error ${d.error}: ${d.msg}`)
-            $("#error-box").show()
-            setInterval(function() {
-                $("#error-box").fadeOut()
-            }, 2000)
-        })
-    event.preventDefault()
-})
+async function login(event) {
+    event.preventDefault();
+
+    const email = document.querySelector("#email").value;
+    const pass = document.querySelector("#pass").value;
+
+    let response = await fetch("../php/login.php", {
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+            email: email,
+            pass: pass
+        }),
+    });
+
+    if (response.ok) {
+        window.location.href = "../index.html";
+    }
+
+    let json = await response.json();
+    let error_box = new bootstrap.Modal(document.querySelector("#error-box"));
+    let error_msg = document.querySelector("#error-msg");
+    console.log(error_box);
+    error_msg.innerText = `Error ${json.error}: ${json.msg}`;
+    error_box.show();
+    setInterval(function() {
+        error_box.hide();
+    }, 3000);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    let login_button = document.querySelector("#login");
+    login_button.addEventListener("submit", login);
+});
