@@ -1,4 +1,7 @@
 async function subscribe() {
+    let params = new URLSearchParams(window.location.search);
+    let id = params.get("id");
+
     let body = new FormData();
     body.set("job_id", id);
     let response = await fetch("../php/apply.php",{
