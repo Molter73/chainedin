@@ -10,13 +10,6 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
-<template id="plantillaOferta">
-    <div id="plantilla" class="col p-3 border border-3 rounded">
-        <h2>Nombre Empresa: <span class="name"></span></h2>
-        <p>Oferta: <span class="oferta"></span></p>
-    </div>
-</template>
-
 <body>
     <header class="d-flex justify-content-left py-3 border-bottom border-light mb-3">
         <ul class="nav nav-pills">
@@ -24,18 +17,30 @@
                 <a class="nav-link link-blue" target="_self">Inicio</a>
             </li>
             <li>
-                <a class="btn btn-outline-primary" href="add-offer.html" role="button">Agregar oferta</a>
+                <a class="btn btn-outline-primary" href="html/add-offer.html" role="button">Agregar oferta</a>
             </li>
         </ul>
     </header>
+
     <div class="container text-center">
-        <div id="listaOfertas" class="row row-cols-md-4">
-            <div id="loader">Loading...</div>
-            <div aria-hidden="true" id="fetchTrigger"></div>
-        </div>
+        <form id="add-offer">
+            <div class="mb-3">
+                <label for="postTitle" class="form-label">Título</label>
+                <input type="text" class="form-control" id="postTitle" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="postCompany" class="form-label">Compañía</label>
+                <input type="text" class="form-control" id="postCompany" name="company">
+            </div>
+            <div class="mb-3">
+                <label for="postDescription" class="form-label">Descripción</label>
+                <textarea type="text" class="form-control" id="postDescription" rows="3" name="description"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
 
-    <script src="../js/main.js"></script>
+    <script src="../js/add-offer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
