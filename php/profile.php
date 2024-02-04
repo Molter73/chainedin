@@ -29,12 +29,49 @@ function get_profile() {
     ));
 }
 
+function update_profile($name, $surname, $phone) {
+    if (is_null($name) || $name === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid name");
+    }
+
+    if (is_null($surname) || $surname === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid surname");
+    }
+
+    if (is_null($phone) || $phone === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid phone");
+    }
+
+    $conn = db_connect();
+
+    $stmt = mysqli_prepare($conn, "UPDATE profiles SET name=?, surname=?, phone=? WHERE id=?;");
+    mysqli_stmt_bind_param($stmt, "sssi", $name, $surname, $phone, $_SESSION["user_id"]);
+    if (!mysqli_stmt_execute($stmt)) {
+        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+    }
+
+    mysqli_close($conn);
+
+    return json_encode(array(
+        "error" => 0,
+        "msg" => "Success",
+    ));
+}
+
 header("Content-Type: application/json");
 validate_session();
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
         echo get_profile();
+        break;
+
+    case "POST":
+        $name = filter_input(INPUT_POST, "name");
+        $surname = filter_input(INPUT_POST, "surname");
+        $phone = filter_input(INPUT_POST, "phone");
+
+        echo update_profile($name, $surname, $phone);
         break;
 
     default:
