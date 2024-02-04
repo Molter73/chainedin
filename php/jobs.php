@@ -71,6 +71,37 @@ function get_jobs($count, $page) {
     return json_encode($response);
 }
 
+function add_job_logo($conn) {
+    $allowed_formats = array("jpg", "jpeg", "png");
+    $filename = $_FILES["logo"]["name"];
+
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    if (!in_array($ext, $allowed_formats)) {
+        return false;
+    }
+
+    $id = mysqli_insert_id($conn);
+    $output_dir = "../imgs/jobs/$id";
+
+    // Create directory if it doesn't exist
+    if (!is_dir($output_dir)) {
+        !mkdir($output_dir, 0777, true);
+    }
+    $output_path = "$output_dir/logo.$ext";
+
+    if (!move_uploaded_file($_FILES["logo"]["tmp_name"], $output_path)) {
+        return false;
+    }
+
+    $stmt = mysqli_prepare($conn, "UPDATE jobs SET logo=? WHERE id=?;");
+    mysqli_stmt_bind_param($stmt, "si", $output_path, $id);
+    if (!mysqli_stmt_execute($stmt)) {
+        return false;
+    }
+
+    return true;
+}
+
 function add_job($title, $description, $company) {
     if (is_null($title) || $title === false) {
         bad_request(INVALID_ARGUMENT, "Invalid title");
@@ -91,6 +122,11 @@ function add_job($title, $description, $company) {
     mysqli_stmt_bind_param($stmt, "ssss", $title, $description, $company, $creation_date);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+    }
+
+    // Check if a logo has been uploaded for the job posting
+    if ($_FILES['logo']['size'] != 0) {
+        add_job_logo($conn);
     }
 
     mysqli_close($conn);

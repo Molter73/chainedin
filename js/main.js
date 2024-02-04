@@ -1,4 +1,4 @@
-const offers_per_page = 20;
+const offers_per_page = 50;
 let total_offers = 0;
 let lastFetchedPage = 0;
 let isFetching = false;

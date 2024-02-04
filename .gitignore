@@ -1,2 +1,5 @@
 # Configuration files
 *.ini
+
+# Uploaded images
+imgs/

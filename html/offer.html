@@ -11,16 +11,36 @@
 </head>
 
 <body>
-    <div>
-        <h1 class="chainedin-title">Chainedin</h1>
-    </div>
+    <header class="d-flex justify-content-left py-3 border-bottom border-light mb-3">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link link-blue" href="main.html">Inicio</a>
+            </li>
+            <li>
+                <a class="btn btn-outline-primary" href="add-offer.html" role="button">Agregar oferta</a>
+            </li>
+        </ul>
+    </header>
 
     <div class="container text-center">
-        <h1 id="puesto">Puesto ofrecido.</h1>
-        <h3 id="nombre-empresa">Nombre de la empresa.</h3>
-        <p id="descripcion">Lorem ipsum......</p>
-        <button id="subscribe" class="btn btn-primary">Subscribirse</button>
-        <button id="back" class="btn btn-secondary">Volver a ofertas</button>
+        <div class="mb-3">
+            <h1 id="puesto">Puesto ofrecido.</h1>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h3 id="nombre-empresa">Nombre de la empresa.</h3>
+            </div>
+            <div class="col">
+                <img id="logo-empresa" alt="Company logo" />
+            </div>
+        </div>
+        <div class="mb-3">
+            <p id="descripcion">Lorem ipsum......</p>
+        </div>
+        <div class="mb-3">
+            <button id="subscribe" class="btn btn-primary">Subscribirse</button>
+            <button id="back" class="btn btn-secondary">Volver a ofertas</button>
+        </div>
     </div>
 
     <script src="../js/offer.js"></script>

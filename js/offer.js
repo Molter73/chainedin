@@ -26,6 +26,11 @@ function fill_offer(data) {
 
     let description = document.getElementById("descripcion");
     description.textContent = data.description;
+
+    if (data.logo != null) {
+        let logo = document.getElementById("logo-empresa");
+        logo.src = data.logo;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
