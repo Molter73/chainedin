@@ -11,9 +11,14 @@
 </head>
 
 <template id="plantillaOferta">
-    <div id="plantilla" class="col p-3 border border-3 rounded">
-        <h2 id="job-title"></h2>
-        <p id="company-name"></p>
+    <div id="plantilla" class="col col-sm-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 id="job-title" class="card-title"></h3>
+                <p id="company-name" class="card-text"></p>
+            </div>
+            <img id="company-logo" alt="Company logo" class="card-img-bottom" />
+        </div>
     </div>
 </template>
 
@@ -30,7 +35,7 @@
     </header>
 
     <div class="container text-center">
-        <div id="listaOfertas" class="row row-cols-md-4"></div>
+        <div id="listaOfertas" class="row"></div>
     </div>
 
     <div class="position-absolute bottom w-100" style="height: 10px" aria-hidden="true" id="fetchTrigger"></div>

@@ -10,6 +10,13 @@ function crearOfertaVacia() {
     return ofertaClone;
 }
 
+function goToOffer(id) {
+    // Vamos a la oferta con el id correspondiente
+    window.location.href = "offer.html?" + new URLSearchParams({
+        id: id,
+    })
+}
+
 // Función para llenar la lista con ofertas
 async function llenarListaOfertas() {
     if ((offers_per_page * lastFetchedPage > total_offers) &&
@@ -40,15 +47,9 @@ async function llenarListaOfertas() {
         plantilla = ofertaVacia.querySelector("#plantilla");
         ofertaVacia.getElementById("company-name").textContent = oferta.company;
         ofertaVacia.getElementById("job-title").textContent = oferta.title;
-        plantilla.setAttribute("id", oferta.id);
+        ofertaVacia.getElementById("company-logo").src = oferta.logo;
         plantilla.addEventListener("click", (event) => {
-            target = event.target.classList.contains("plantilla") ?
-                event.target : event.target.closest("div")
-
-            // Vamos a la oferta con el id correspondiente
-            window.location.href = "offer.html?" + new URLSearchParams({
-                id: target.id,
-            })
+            goToOffer(oferta.id);
         });
 
         listaOfertas.append(ofertaVacia);

@@ -43,7 +43,7 @@ function get_jobs($count, $page) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT id, title, company FROM jobs ORDER BY creation_date DESC LIMIT ?,?");
+    $stmt = mysqli_prepare($conn, "SELECT id, title, company, logo FROM jobs ORDER BY creation_date DESC LIMIT ?,?");
     mysqli_stmt_bind_param($stmt, "ii", $offset, $count);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
