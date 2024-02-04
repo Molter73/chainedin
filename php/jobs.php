@@ -34,7 +34,7 @@ function get_job($id, $count, $page) {
     $offset = $count * $page;
     $stmt = mysqli_prepare(
         $conn,
-        "SELECT name, email FROM users INNER JOIN applicants ON users.id = applicants.user_id WHERE applicants.job_id = ? LIMIT ?, ?"
+        "SELECT profiles.name, email, picture FROM users INNER JOIN applicants ON users.id = applicants.user_id INNER JOIN profiles ON users.id = profiles.id WHERE applicants.job_id = ? LIMIT ?, ?"
     );
     mysqli_stmt_bind_param($stmt, "iii", $id, $offset, $count);
 

@@ -23,7 +23,6 @@ async function subscribe() {
     response = await response.json();
     let error_box = new bootstrap.Modal(document.querySelector("#error-box"));
     let error_msg = document.querySelector("#error-msg");
-    console.log(error_box);
     error_msg.innerText = `Error ${response.error}: ${response.msg}`;
     error_box.show();
     setInterval(function() {
@@ -50,11 +49,16 @@ function fill_offer(data) {
 
     let applicants_list = document.getElementById("applicants");
     data.applicants.forEach((applicant) => {
+        console.log(applicant);
         let template = document.getElementById("applicant-template");
         let applicant_node = template.content.cloneNode(true);
 
         applicant_node.getElementById("applicant-name").textContent = applicant.name;
         applicant_node.getElementById("applicant-email").textContent = applicant.email;
+
+        if (applicant.picture != null) {
+            applicant_node.getElementById("applicant-pic").src = applicant.picture;
+        }
 
         applicants_list.append(applicant_node);
     });
