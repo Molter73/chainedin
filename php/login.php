@@ -34,7 +34,11 @@ function login($email, $pass) {
     $res = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_row($res);
     if (is_null($row)) {
-        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+        unauthorized_access(LOGIN_FAILED, "Email not found");
+    }
+
+    if ($row === false) {
+        internal_error(DATABASE_QUERY_ERROR, mysqli_error($conn));
     }
 
     if (!password_verify($pass, $row[1])) {

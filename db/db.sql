@@ -26,5 +26,6 @@ CREATE TABLE applicants(
     CONSTRAINT `fk_applicant_job`
         FOREIGN KEY (job_id) REFERENCES jobs (id)
         ON DELETE CASCADE
-        ON UPDATE RESTRICT
+        ON UPDATE RESTRICT,
+    UNIQUE KEY `unique_applicants` (user_id, job_id)
 );

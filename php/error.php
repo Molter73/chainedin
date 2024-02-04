@@ -26,7 +26,7 @@ function bad_request($err_code, $msg) {
 }
 
 function unauthorized_access($err_code, $msg) {
-    http_response_code(404);
+    http_response_code(403);
     die_json($err_code, $msg);
 }
 
