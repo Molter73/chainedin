@@ -14,7 +14,21 @@ async function subscribe() {
             "job_id": id,
         }),
     })
-        .then((response) => response.json());
+
+    if (response.ok) {
+        location.reload();
+        return;
+    }
+
+    response = await response.json();
+    let error_box = new bootstrap.Modal(document.querySelector("#error-box"));
+    let error_msg = document.querySelector("#error-msg");
+    console.log(error_box);
+    error_msg.innerText = `Error ${response.error}: ${response.msg}`;
+    error_box.show();
+    setInterval(function() {
+        error_box.hide();
+    }, 3000);
 }
 
 function fill_offer(data) {
@@ -33,6 +47,17 @@ function fill_offer(data) {
     } else {
         logo.src = "../assets/icons8-company-64.png";
     }
+
+    let applicants_list = document.getElementById("applicants");
+    data.applicants.forEach((applicant) => {
+        let template = document.getElementById("applicant-template");
+        let applicant_node = template.content.cloneNode(true);
+
+        applicant_node.getElementById("applicant-name").textContent = applicant.name;
+        applicant_node.getElementById("applicant-email").textContent = applicant.email;
+
+        applicants_list.append(applicant_node);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
