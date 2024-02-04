@@ -21,12 +21,13 @@
                     <a class="btn btn-outline-primary" href="add-offer.html" role="button">Agregar oferta</a>
                 </li>
             </ul>
-            <div class="nav-item dropdown">
-                <img src="../assets/icons8-male-user-50.png" alt="" width="30" height="24" />
+            <div class="nav-item dropdown" id="nav-profile">
+                <img src="../assets/icons8-male-user-50.png" alt="" width="30" height="24"
+                    class="ratio-1x1 rounded-circle" />
                 <span id="welcome-message" class="nav-text dropdown-toggle" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">Hola, Usuario!</span>
                 <ul class="dropdown-menu" aria-labelledby="welcome-message">
-                    <li><a id="profile" class="dropdown-item" href="#">Perfil</a></li>
+                    <li><a id="profile-dropdown" class="dropdown-item" href="#">Perfil</a></li>
                     <li><a class="dropdown-item" href="edit-profile.html">Editar</a></li>
                     <li>
                         <hr class="dropdown-divider">
@@ -39,7 +40,8 @@
 
     <div class="container text-center">
         <div class="row">
-            <img class="col" id="profile-pic" src="../assets/icons8-male-user-50.png" alt="User profile" />
+            <img class="col ratio-1x1 rounded-circle" id="profile-pic" src="../assets/icons8-male-user-50.png"
+                alt="User profile" />
             <div class="col">
                 <h2 id="name"></h2>
                 <p id="phone"></p>
@@ -54,7 +56,7 @@
     </div>
 
     <script src="../js/profile.js"></script>
-    <script src="../js/profile-dropdown.js"></script>
+    <script src="../js/nav-profile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>

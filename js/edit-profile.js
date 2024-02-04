@@ -57,6 +57,10 @@ document.addEventListener("DOMContentLoaded", async function() {
         profile_pic.src = URL.createObjectURL(pic.files[0]);
     });
 
+    if (data.picture != null) {
+        profile_pic.src = data.picture;
+    }
+
     document.getElementById("edit-profile").addEventListener("submit", update_profile);
     document.getElementById("back").addEventListener("click", function() {
         window.location.href = "../html/profile.html";
