@@ -23,16 +23,30 @@
 </template>
 
 <body>
-    <header class="d-flex justify-content-left py-3 border-bottom border-light mb-3">
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link link-blue" target="_self">Inicio</a>
-            </li>
-            <li>
-                <a class="btn btn-outline-primary" href="add-offer.html" role="button">Agregar oferta</a>
-            </li>
-        </ul>
-    </header>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link link-blue" target="_self">Inicio</a>
+                </li>
+                <li>
+                    <a class="btn btn-outline-primary" href="add-offer.html" role="button">Agregar oferta</a>
+                </li>
+            </ul>
+            <div class="nav-item dropdown">
+                <img src="../assets/icons8-male-user-50.png" alt="" width="30" height="24" />
+                <span id="welcome-message" class="nav-text dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">Hola, Usuario!</span>
+                <ul class="dropdown-menu" aria-labelledby="welcome-message">
+                    <li><a id="profile" class="dropdown-item" href="#">Perfil</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a id="logout" class="dropdown-item" href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <div class="container text-center">
         <div id="listaOfertas" class="row"></div>
