@@ -30,6 +30,13 @@ async function subscribe() {
     }, 3000);
 }
 
+function goto_profile(id) {
+    // Vamos a la oferta con el id correspondiente
+    window.location.href = "profile.html?" + new URLSearchParams({
+        id: id,
+    })
+}
+
 function fill_offer(data) {
     let name = document.getElementById("nombre-empresa");
     name.textContent = data.company;
@@ -49,7 +56,6 @@ function fill_offer(data) {
 
     let applicants_list = document.getElementById("applicants");
     data.applicants.forEach((applicant) => {
-        console.log(applicant);
         let template = document.getElementById("applicant-template");
         let applicant_node = template.content.cloneNode(true);
 
@@ -60,6 +66,9 @@ function fill_offer(data) {
             applicant_node.getElementById("applicant-pic").src = applicant.picture;
         }
 
+        applicant_node.getElementById('template').addEventListener("click", function() {
+            goto_profile(applicant.id);
+        });
         applicants_list.append(applicant_node);
     });
 }

@@ -9,11 +9,11 @@ include_once("error.php");
 include_once("db.php");
 include_once("session.php");
 
-function get_profile() {
+function get_profile($id) {
     $conn = db_connect();
 
     $stmt = mysqli_prepare($conn, "SELECT profiles.name, surname, phone, picture, CV, email  FROM profiles INNER JOIN users ON profiles.id=users.id WHERE profiles.id=?;");
-    mysqli_stmt_bind_param($stmt, "i", $_SESSION["user_id"]);
+    mysqli_stmt_bind_param($stmt, "i",$id);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
     }
@@ -94,7 +94,12 @@ validate_session();
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "GET":
-        echo get_profile();
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT, [
+            "options" => [
+                "default" => $_SESSION["user_id"],
+            ]
+        ]);
+        echo get_profile($id);
         break;
 
     case "POST":

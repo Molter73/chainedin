@@ -1,5 +1,14 @@
 document.addEventListener("DOMContentLoaded", async function() {
-    let response = await fetch("../php/profile.php");
+    let params = new URLSearchParams(window.location.search);
+    let id = params.get("id");
+    let url = "../php/profile.php";
+
+    if (id != null) {
+        url += "?" + new URLSearchParams({
+            id: id,
+        });
+    }
+    let response = await fetch(url);
 
     console.log(response);
 
