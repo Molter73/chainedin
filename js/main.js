@@ -47,7 +47,14 @@ async function llenarListaOfertas() {
         plantilla = ofertaVacia.querySelector("#plantilla");
         ofertaVacia.getElementById("company-name").textContent = oferta.company;
         ofertaVacia.getElementById("job-title").textContent = oferta.title;
-        ofertaVacia.getElementById("company-logo").src = oferta.logo;
+
+        let logo = ofertaVacia.getElementById("company-logo");
+        if (oferta.logo == null) {
+            logo.src = "../assets/icons8-company-64.png";
+        } else {
+            logo.src = oferta.logo;
+        }
+
         plantilla.addEventListener("click", (event) => {
             goToOffer(oferta.id);
         });

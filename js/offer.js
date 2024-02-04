@@ -27,9 +27,11 @@ function fill_offer(data) {
     let description = document.getElementById("descripcion");
     description.textContent = data.description;
 
+    let logo = document.getElementById("logo-empresa");
     if (data.logo != null) {
-        let logo = document.getElementById("logo-empresa");
         logo.src = data.logo;
+    } else {
+        logo.src = "../assets/icons8-company-64.png";
     }
 }
 
