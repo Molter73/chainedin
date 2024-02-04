@@ -28,15 +28,31 @@ function signup($name, $email, $pass) {
     $hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
 
     $conn = db_connect();
+    mysqli_begin_transaction($conn);
 
     $stmt = mysqli_prepare($conn, "INSERT INTO users(name, email, pass) VALUES (?, ?, ?);");
     mysqli_stmt_bind_param($stmt, "sss", $name, $email, $hashed_pass);
     if (!mysqli_stmt_execute($stmt)) {
+        mysqli_rollback($conn);
         internal_error(
             DATABASE_QUERY_ERROR,
             "Failed to create new user - " . mysqli_error($conn)
         );
     }
+
+    $id = mysqli_insert_id($conn);
+    $stmt = mysqli_prepare($conn, "INSERT INTO profiles(id) VALUES (?);");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    if (!mysqli_stmt_execute($stmt)) {
+        mysqli_rollback($conn);
+        internal_error(
+            DATABASE_QUERY_ERROR,
+            "Failed to create new profile - " . mysqli_error($conn)
+        );
+    }
+
+    mysqli_commit($conn);
+    mysqli_close($conn);
 
     return json_encode(array(
         "error" => 0,

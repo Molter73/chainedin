@@ -6,6 +6,20 @@ CREATE TABLE users (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE profiles (
+    id INT UNSIGNED NOT NULL,
+    name TEXT,
+    surname TEXT,
+    phone TEXT,
+    picture TEXT,
+    CV JSON,
+    PRIMARY KEY(id),
+    CONSTRAINT `fk_profile_user`
+        FOREIGN KEY (id) REFERENCES users (id)
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
+);
+
 CREATE TABLE jobs (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     title TEXT NOT NULL,
