@@ -11,6 +11,8 @@ async function update_navbar() {
 
     let profile = document.getElementById("nav-profile");
 
+    document.getElementById("username").textContent = data.name;
+
     if (data.picture != null) {
         let pic = profile.querySelector('img');
         pic.src = data.picture;
