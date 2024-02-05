@@ -10,6 +10,18 @@
     <link rel="stylesheet" href="../css/styles.css">
 </head>
 
+<template id="plantillaOferta">
+    <div id="plantilla" class="col col-sm-4">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 id="job-title" class="card-title"></h3>
+                <p id="company-name" class="card-text"></p>
+            </div>
+            <img id="company-logo" alt="Company logo" class="card-img-bottom" />
+        </div>
+    </div>
+</template>
+
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
@@ -57,16 +69,20 @@
         </div>
         <div class="row">
             <div class="col">
+                <h2>Experiencia profesional</h2>
                 <p id="cv"></p>
             </div>
         </div>
-    </div>
+        <div id="titleOfertas" class="row" style="display: none">
+            <h2>Mis candidaturas</h2>
+        </div>
+        <div class="row" id="listaOfertas" style="display: none"></div>
 
-    <script src="../js/profile.js"></script>
-    <script src="../js/nav-profile.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+        <script src="../js/profile.js"></script>
+        <script src="../js/nav-profile.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>

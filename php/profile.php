@@ -10,10 +10,21 @@ include_once("db.php");
 include_once("session.php");
 include_once("utils.php");
 
+function get_applications($conn, $id) {
+    $stmt = mysqli_prepare($conn, "SELECT id, title, company, logo FROM jobs INNER JOIN applicants ON jobs.id = applicants.job_id WHERE applicants.user_id=?;");
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    if (!mysqli_stmt_execute($stmt)) {
+        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+    }
+
+    $res = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
 function get_profile($id) {
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT profiles.name, surname, phone, picture, CV, email  FROM profiles INNER JOIN users ON profiles.id=users.id WHERE profiles.id=?;");
+    $stmt = mysqli_prepare($conn, "SELECT name, surname, phone, picture, CV, email FROM profiles INNER JOIN users ON profiles.id=users.id WHERE profiles.id=?;");
     mysqli_stmt_bind_param($stmt, "i",$id);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
@@ -21,6 +32,10 @@ function get_profile($id) {
 
     $res = mysqli_stmt_get_result($stmt);
     $data = mysqli_fetch_assoc($res);
+
+    if ($id == $_SESSION["user_id"]) {
+        $data['applications'] = get_applications($conn, $id);
+    }
 
     mysqli_close($conn);
 
