@@ -28,19 +28,41 @@
 
     <div class="container text-center">
         <form id="signup">
-            <div class="mb-3">
-                <label class="form-label" for="email">Correo Electrónico</label>
-                <input class="form-control" type="email" id="email" name="email" required>
+            <div class="row">
+                <div class="col">
+                    <input type="file" id="upload-pic" style="display: none;" />
+                    <img class="ratio-1x1 rounded-circle" style="width: 50%; cursor: pointer;" id="profile-pic"
+                        src="../assets/icons8-male-user-50.png" alt="User profile" />
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label" for="email">Correo Electrónico<span
+                                style="color: red">*</span></label>
+                        <input class="form-control" type="email" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="pass">Contraseña<span style="color: red">*</span></label>
+                        <input class="form-control" type="password" id="pass" name="pass" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Nombre/s<span style="color: red">*</span></label>
+                        <input class="form-control" type="text" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="surname">Apellido/s<span style="color: red">*</span></label>
+                        <input class="form-control" type="text" id="surname" name="surname" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="phone">Teléfono</label>
+                        <input class="form-control" type="text" id="phone" name="phone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="CV">Experiencia profesional</label>
+                        <textarea class="form-control" id="CV" name="CV"></textarea>
+                    </div>
+                    <button class="btn btn-primary mb-1" type="submit">Subscribirse</button>
+                </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="name">Nombre</label>
-                <input class="form-control" type="text" id="name" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="pass">Contraseña</label>
-                <input class="form-control" type="password" id="pass" name="pass" required>
-            </div>
-            <button class="btn btn-primary mb-1" type="submit">Subscribirse</button>
         </form>
         <p class="login-subtext">
             ¿Ya está registrado? <a href="../html/login.html">Ingrese aquí</a>

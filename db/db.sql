@@ -1,6 +1,5 @@
 CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     pass TEXT NOT NULL,
     PRIMARY KEY(id)
@@ -12,7 +11,7 @@ CREATE TABLE profiles (
     surname TEXT,
     phone TEXT,
     picture TEXT,
-    CV JSON,
+    CV TEXT,
     PRIMARY KEY(id),
     CONSTRAINT `fk_profile_user`
         FOREIGN KEY (id) REFERENCES users (id)

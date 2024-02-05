@@ -11,12 +11,9 @@
  */
 include_once("error.php");
 include_once("db.php");
+include_once("utils.php");
 
-function signup($name, $email, $pass) {
-    if (is_null($name) || $name === false) {
-        bad_request(INVALID_ARGUMENT, "Invalid name");
-    }
-
+function signup($email, $pass, $name, $surname, $phone, $CV) {
     if (is_null($email) || $email === false) {
         bad_request(INVALID_ARGUMENT, "Invalid email");
     }
@@ -25,13 +22,29 @@ function signup($name, $email, $pass) {
         bad_request(INVALID_ARGUMENT, "Invalid pass");
     }
 
+    if (is_null($name) || $name === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid name");
+    }
+
+    if (is_null($surname) || $surname === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid surname");
+    }
+
+    if ($phone === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid phone");
+    }
+
+    if ($CV === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid CV");
+    }
+
     $hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
 
     $conn = db_connect();
     mysqli_begin_transaction($conn);
 
-    $stmt = mysqli_prepare($conn, "INSERT INTO users(name, email, pass) VALUES (?, ?, ?);");
-    mysqli_stmt_bind_param($stmt, "sss", $name, $email, $hashed_pass);
+    $stmt = mysqli_prepare($conn, "INSERT INTO users(email, pass) VALUES (?, ?);");
+    mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_pass);
     if (!mysqli_stmt_execute($stmt)) {
         mysqli_rollback($conn);
         internal_error(
@@ -41,8 +54,10 @@ function signup($name, $email, $pass) {
     }
 
     $id = mysqli_insert_id($conn);
-    $stmt = mysqli_prepare($conn, "INSERT INTO profiles(id) VALUES (?);");
-    mysqli_stmt_bind_param($stmt, "i", $id);
+    $pic = download_profile_pic($id, 'pic');
+
+    $stmt = mysqli_prepare($conn, "INSERT INTO profiles(id, name, surname, phone, CV, picture) VALUES (?, ?, ?, ?, ?, ?);");
+    mysqli_stmt_bind_param($stmt, "isssss", $id, $name, $surname, $phone, $CV, $pic);
     if (!mysqli_stmt_execute($stmt)) {
         mysqli_rollback($conn);
         internal_error(
@@ -64,11 +79,14 @@ header("Content-Type: application/json");
 
 switch($_SERVER["REQUEST_METHOD"]) {
     case "POST":
-        $name = filter_input(INPUT_POST, "name");
         $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
         $pass = filter_input(INPUT_POST, "pass");
+        $name = filter_input(INPUT_POST, "name");
+        $surname = filter_input(INPUT_POST, "surname");
+        $phone = filter_input(INPUT_POST, "phone");
+        $CV = filter_input(INPUT_POST, "CV");
 
-        echo signup($name, $email, $pass);
+        echo signup($email, $pass, $name, $surname, $phone, $CV);
         break;
 
     default:

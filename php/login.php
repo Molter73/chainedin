@@ -22,7 +22,7 @@ function login($email, $pass) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT name, pass, id FROM users WHERE email=?");
+    $stmt = mysqli_prepare($conn, "SELECT pass, id FROM users WHERE email=?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(
@@ -41,15 +41,14 @@ function login($email, $pass) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error($conn));
     }
 
-    if (!password_verify($pass, $row[1])) {
+    if (!password_verify($pass, $row[0])) {
         unauthorized_access(LOGIN_FAILED, "Invalid password");
     }
 
     mysqli_close($conn);
     session_start();
 
-    $_SESSION["username"] = $row[0];
-    $_SESSION["user_id"] = $row[2];
+    $_SESSION["user_id"] = $row[1];
     return json_encode(array(
         "error" => 0,
         "msg" => "Logged in",
