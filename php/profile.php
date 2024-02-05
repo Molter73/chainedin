@@ -45,7 +45,7 @@ function get_profile($id) {
     ));
 }
 
-function update_profile($name, $surname, $phone) {
+function update_profile($name, $surname, $phone, $CV) {
     if (is_null($name) || $name === false) {
         bad_request(INVALID_ARGUMENT, "Invalid name");
     }
@@ -58,13 +58,17 @@ function update_profile($name, $surname, $phone) {
         bad_request(INVALID_ARGUMENT, "Invalid phone");
     }
 
+    if (is_null($CV) || $CV === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid CV");
+    }
+
     $id = $_SESSION["user_id"];
     $pic = download_profile_pic($id, 'pic');
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "UPDATE profiles SET name=?, surname=?, phone=?, picture=? WHERE id=?;");
-    mysqli_stmt_bind_param($stmt, "ssssi", $name, $surname, $phone, $pic, $_SESSION["user_id"]);
+    $stmt = mysqli_prepare($conn, "UPDATE profiles SET name=?, surname=?, phone=?, picture=?, CV=? WHERE id=?;");
+    mysqli_stmt_bind_param($stmt, "sssssi", $name, $surname, $phone, $pic, $CV, $_SESSION["user_id"]);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
     }
@@ -94,8 +98,9 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $name = filter_input(INPUT_POST, "name");
         $surname = filter_input(INPUT_POST, "surname");
         $phone = filter_input(INPUT_POST, "phone");
+        $CV = filter_input(INPUT_POST, "CV");
 
-        echo update_profile($name, $surname, $phone);
+        echo update_profile($name, $surname, $phone, $CV);
         break;
 
     default:

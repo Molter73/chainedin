@@ -4,6 +4,7 @@ async function update_profile(event) {
     const name = document.getElementById("postName").value;
     const surname = document.getElementById("postSurname").value;
     const phone = document.getElementById("postPhone").value;
+    const cv = document.getElementById("postCV").value;
     const pic = document.getElementById("upload-pic");
     console.log(pic);
 
@@ -11,6 +12,7 @@ async function update_profile(event) {
     form_data.set("name", name);
     form_data.set("surname", surname);
     form_data.set("phone", phone);
+    form_data.set("CV", cv);
     form_data.set("pic", pic.files[0]);
 
     let response = await fetch("../php/profile.php", {
