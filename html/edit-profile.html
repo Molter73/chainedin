@@ -28,7 +28,12 @@
                     aria-expanded="false">Hola, <span id="username">Usuario</span>!</span>
                 <ul class="dropdown-menu" aria-labelledby="welcome-message">
                     <li><a id="profile-dropdown" class="dropdown-item" href="#">Perfil</a></li>
-                    <li><a class="dropdown-item" href="edit-profile.html">Editar</a></li>
+                    <li>
+                        <a class="dropdown-item" href="edit-profile.html">
+                            <img style="max-height: 1rem; width: auto;" src="../assets/icons8-edit-50.png" alt="" />
+                            Editar perfil
+                        </a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -41,9 +46,11 @@
     <div class="container text-center">
         <form id="edit-profile">
             <div class="row">
-                <input type="file" id="upload-pic" style="display: none;" />
-                <img class="col ratio-1x1 rounded-circle" id="profile-pic" src="../assets/icons8-male-user-50.png"
-                    alt="User profile" />
+                <div class="col">
+                    <input type="file" id="upload-pic" style="display: none;" />
+                    <img class="ratio-1x1 rounded-circle" style="width: 50%; cursor: pointer;" id="profile-pic"
+                        src="../assets/icons8-male-user-50.png" alt="User profile" />
+                </div>
                 <div class="col">
                     <div class="mb-3">
                         <label for="postName" class="form-label">Nombre/s</label>

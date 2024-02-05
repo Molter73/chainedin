@@ -32,6 +32,6 @@ async function login(event) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    let login_button = document.querySelector("#login");
-    login_button.addEventListener("submit", login);
+    let login_form = document.querySelector("#login");
+    login_form.addEventListener("submit", login);
 });

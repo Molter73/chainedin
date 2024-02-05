@@ -28,7 +28,12 @@
                     aria-expanded="false">Hola, <span id="username">Usuario</span>!</span>
                 <ul class="dropdown-menu" aria-labelledby="welcome-message">
                     <li><a id="profile-dropdown" class="dropdown-item" href="#">Perfil</a></li>
-                    <li><a class="dropdown-item" href="edit-profile.html">Editar</a></li>
+                    <li>
+                        <a class="dropdown-item" href="edit-profile.html">
+                            <img style="max-height: 1rem; width: auto;" src="../assets/icons8-edit-50.png" alt="" />
+                            Editar
+                        </a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -40,8 +45,10 @@
 
     <div class="container text-center">
         <div class="row">
-            <img class="col ratio-1x1 rounded-circle" id="profile-pic" src="../assets/icons8-male-user-50.png"
-                alt="User profile" />
+            <div class="col">
+                <img class="ratio-1x1 rounded-circle" style="width: 50%;" id="profile-pic"
+                    src="../assets/icons8-male-user-50.png" alt="User profile" />
+            </div>
             <div class="col">
                 <h2 id="name"></h2>
                 <p id="phone"></p>
