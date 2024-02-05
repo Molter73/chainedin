@@ -29,7 +29,7 @@ async function new_offer(e) {
 }
 
 document.addEventListener("DOMContentLoaded", async function() {
-    let add_offer = document.getElementById("add-offer");
+    let add_offer = document.getElementById("post-offer");
 
     console.log(add_offer);
     add_offer.addEventListener("submit", new_offer);

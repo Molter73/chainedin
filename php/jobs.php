@@ -17,6 +17,7 @@
 include_once("error.php");
 include_once("db.php");
 include_once("session.php");
+include_once("user_types.php");
 
 function get_job($id, $count, $page) {
     $conn = db_connect();
@@ -31,23 +32,25 @@ function get_job($id, $count, $page) {
     $data = mysqli_fetch_assoc($res);
 
     // Get applicants for job
-    $offset = $count * $page;
-    $stmt = mysqli_prepare(
-        $conn,
-        "SELECT profiles.name, email, picture, users.id FROM users INNER JOIN applicants ON users.id = applicants.user_id INNER JOIN profiles ON users.id = profiles.id WHERE applicants.job_id = ? LIMIT ?, ?"
-    );
-    mysqli_stmt_bind_param($stmt, "iii", $id, $offset, $count);
+    if ($data["recruiter_id"] == $_SESSION["user_id"]) {
+        $offset = $count * $page;
+        $stmt = mysqli_prepare(
+            $conn,
+            "SELECT profiles.name, email, picture, users.id FROM users INNER JOIN applicants ON users.id = applicants.user_id INNER JOIN profiles ON users.id = profiles.id WHERE applicants.job_id = ? LIMIT ?, ?"
+        );
+        mysqli_stmt_bind_param($stmt, "iii", $id, $offset, $count);
 
-    if (!mysqli_stmt_execute($stmt)) {
-        internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+        if (!mysqli_stmt_execute($stmt)) {
+            internal_error(DATABASE_QUERY_ERROR, mysqli_error());
+        }
+
+        $res = mysqli_stmt_get_result($stmt);
+        $applicants = mysqli_fetch_all($res, MYSQLI_ASSOC);
+
+        mysqli_close($conn);
+
+        $data["applicants"] = $applicants;
     }
-
-    $res = mysqli_stmt_get_result($stmt);
-    $applicants = mysqli_fetch_all($res, MYSQLI_ASSOC);
-
-    mysqli_close($conn);
-
-    $data["applicants"] = $applicants;
 
     return json_encode(array(
         'error' => 0,
@@ -60,8 +63,16 @@ function get_jobs($count, $page) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT id, title, company, logo FROM jobs ORDER BY creation_date DESC LIMIT ?,?");
-    mysqli_stmt_bind_param($stmt, "ii", $offset, $count);
+    $query = is_recruiter($_SESSION["user_type"]) ?
+         "SELECT id, title, company, logo FROM jobs WHERE recruiter_id=? ORDER BY creation_date DESC LIMIT ?,?" :
+         "SELECT id, title, company, logo FROM jobs ORDER BY creation_date DESC LIMIT ?,?";
+    $stmt = mysqli_prepare($conn, $query);
+    if (is_recruiter($_SESSION["user_type"])) {
+        mysqli_stmt_bind_param($stmt, "iii", $_SESSION["user_id"], $offset, $count);
+    } else {
+        mysqli_stmt_bind_param($stmt, "ii", $offset, $count);
+    }
+
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
     }
@@ -120,6 +131,10 @@ function add_job_logo($conn) {
 }
 
 function add_job($title, $description, $company) {
+    if (!is_recruiter($_SESSION["user_type"])) {
+        unauthorized_access(UNAUTHORIZED_ACCESS, "Only recuiters can add jobs");
+    }
+
     if (is_null($title) || $title === false) {
         bad_request(INVALID_ARGUMENT, "Invalid title");
     }
@@ -134,9 +149,9 @@ function add_job($title, $description, $company) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "INSERT INTO jobs(title, description, company, creation_date) VALUES (?, ?, ?, ?);");
+    $stmt = mysqli_prepare($conn, "INSERT INTO jobs(title, description, company, creation_date, recruiter_id) VALUES (?, ?, ?, ?, ?);");
     $creation_date = date("Y-m-d");
-    mysqli_stmt_bind_param($stmt, "ssss", $title, $description, $company, $creation_date);
+    mysqli_stmt_bind_param($stmt, "ssssi", $title, $description, $company, $creation_date, $_SESSION["user_id"]);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
     }

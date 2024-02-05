@@ -12,8 +12,20 @@
 include_once("error.php");
 include_once("db.php");
 include_once("utils.php");
+include_once("user_types.php");
 
-function signup($email, $pass, $name, $surname, $phone, $CV) {
+function translate_user_type($type) {
+    switch($type) {
+        case "usuario":
+            return USUARIO;
+        case "reclutador":
+            return RECLUTADOR;
+        default:
+            return false;
+    }
+}
+
+function signup($email, $pass, $name, $surname, $phone, $CV, $type) {
     if (is_null($email) || $email === false) {
         bad_request(INVALID_ARGUMENT, "Invalid email");
     }
@@ -38,13 +50,22 @@ function signup($email, $pass, $name, $surname, $phone, $CV) {
         bad_request(INVALID_ARGUMENT, "Invalid CV");
     }
 
+    if (is_null($type) || $type === false) {
+        bad_request(INVALID_ARGUMENT, "Invalid user type");
+    }
+
+    $numeric_type = translate_user_type($type);
+    if ($numeric_type === false) {
+        bad_request(INVALID_ARGUMENT, "Unknown user type: ". $type);
+    }
+
     $hashed_pass = password_hash($pass, PASSWORD_BCRYPT);
 
     $conn = db_connect();
     mysqli_begin_transaction($conn);
 
-    $stmt = mysqli_prepare($conn, "INSERT INTO users(email, pass) VALUES (?, ?);");
-    mysqli_stmt_bind_param($stmt, "ss", $email, $hashed_pass);
+    $stmt = mysqli_prepare($conn, "INSERT INTO users(email, pass, type) VALUES (?, ?, ?);");
+    mysqli_stmt_bind_param($stmt, "ssi", $email, $hashed_pass, $numeric_type);
     if (!mysqli_stmt_execute($stmt)) {
         mysqli_rollback($conn);
         internal_error(
@@ -85,8 +106,9 @@ switch($_SERVER["REQUEST_METHOD"]) {
         $surname = filter_input(INPUT_POST, "surname");
         $phone = filter_input(INPUT_POST, "phone");
         $CV = filter_input(INPUT_POST, "CV");
+        $type = filter_input(INPUT_POST, "type");
 
-        echo signup($email, $pass, $name, $surname, $phone, $CV);
+        echo signup($email, $pass, $name, $surname, $phone, $CV, $type);
         break;
 
     default:

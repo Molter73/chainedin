@@ -9,6 +9,7 @@ include_once("error.php");
 include_once("db.php");
 include_once("session.php");
 include_once("utils.php");
+include_once("user_types.php");
 
 function get_applications($conn, $id) {
     $stmt = mysqli_prepare($conn, "SELECT id, title, company, logo FROM jobs INNER JOIN applicants ON jobs.id = applicants.job_id WHERE applicants.user_id=?;");
@@ -24,7 +25,7 @@ function get_applications($conn, $id) {
 function get_profile($id) {
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT name, surname, phone, picture, CV, email FROM profiles INNER JOIN users ON profiles.id=users.id WHERE profiles.id=?;");
+    $stmt = mysqli_prepare($conn, "SELECT name, surname, phone, picture, CV, email, type FROM profiles INNER JOIN users ON profiles.id=users.id WHERE profiles.id=?;");
     mysqli_stmt_bind_param($stmt, "i",$id);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
@@ -32,6 +33,8 @@ function get_profile($id) {
 
     $res = mysqli_stmt_get_result($stmt);
     $data = mysqli_fetch_assoc($res);
+
+    $data["type"] = user_type_to_string($data["type"]);
 
     if ($id == $_SESSION["user_id"]) {
         $data['applications'] = get_applications($conn, $id);

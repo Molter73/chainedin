@@ -22,7 +22,7 @@ function login($email, $pass) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "SELECT pass, id FROM users WHERE email=?");
+    $stmt = mysqli_prepare($conn, "SELECT pass, id, type FROM users WHERE email=?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(
@@ -49,6 +49,7 @@ function login($email, $pass) {
     session_start();
 
     $_SESSION["user_id"] = $row[1];
+    $_SESSION["user_type"] = $row[2];
     return json_encode(array(
         "error" => 0,
         "msg" => "Logged in",

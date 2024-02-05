@@ -2,6 +2,7 @@ CREATE TABLE users (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     email TEXT NOT NULL UNIQUE,
     pass TEXT NOT NULL,
+    type INT UNSIGNED NOT NULL,
     PRIMARY KEY(id)
 );
 
@@ -21,6 +22,7 @@ CREATE TABLE profiles (
 
 CREATE TABLE jobs (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    recruiter_id INT,
     title TEXT NOT NULL,
     description LONGTEXT NOT NULL,
     company TEXT NOT NULL,

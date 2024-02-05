@@ -1,6 +1,8 @@
 async function subscribe(event) {
     event.preventDefault();
 
+    const user_type = document.getElementById("radioUsuario").checked ?
+        "usuario" : "reclutador";
     const pic = document.getElementById("upload-pic");
 
     let form_data = new FormData();
@@ -10,6 +12,7 @@ async function subscribe(event) {
     form_data.set("surname", document.querySelector("#surname").value);
     form_data.set("phone", document.querySelector("#phone").value);
     form_data.set("CV", document.querySelector("#CV").value);
+    form_data.set("type", user_type);
 
     if (pic.files[0] != null) {
         form_data.set("pic", pic.files[0]);

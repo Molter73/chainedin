@@ -16,8 +16,7 @@ async function subscribe() {
     })
 
     if (response.ok) {
-        location.reload();
-        return;
+        window.location.href = "../html/profile.html";
     }
 
     response = await response.json();
@@ -55,22 +54,25 @@ function fill_offer(data) {
     }
 
     let applicants_list = document.getElementById("applicants");
-    data.applicants.forEach((applicant) => {
-        let template = document.getElementById("applicant-template");
-        let applicant_node = template.content.cloneNode(true);
+    if (data.applicants != null) {
+        document.getElementById("applicants-title").style.display = "";
+        data.applicants.forEach((applicant) => {
+            let template = document.getElementById("applicant-template");
+            let applicant_node = template.content.cloneNode(true);
 
-        applicant_node.getElementById("applicant-name").textContent = applicant.name;
-        applicant_node.getElementById("applicant-email").textContent = applicant.email;
+            applicant_node.getElementById("applicant-name").textContent = applicant.name;
+            applicant_node.getElementById("applicant-email").textContent = applicant.email;
 
-        if (applicant.picture != null) {
-            applicant_node.getElementById("applicant-pic").src = applicant.picture;
-        }
+            if (applicant.picture != null) {
+                applicant_node.getElementById("applicant-pic").src = applicant.picture;
+            }
 
-        applicant_node.getElementById('template').addEventListener("click", function() {
-            goto_profile(applicant.id);
+            applicant_node.getElementById('template').addEventListener("click", function() {
+                goto_profile(applicant.id);
+            });
+            applicants_list.append(applicant_node);
         });
-        applicants_list.append(applicant_node);
-    });
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async function() {

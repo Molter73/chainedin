@@ -16,8 +16,13 @@
 include_once("error.php");
 include_once("db.php");
 include_once("session.php");
+include_once("user_types.php");
 
 function apply($user_id, $job_id) {
+    if (!is_user($_SESSION["user_type"])) {
+        bad_request(INVALID_USER, "Only users can apply to jobs");
+    }
+
     if (is_null($job_id) || $job_id === false) {
         bad_request(INVALID_ARGUMENT, "Invalid job id");
     }

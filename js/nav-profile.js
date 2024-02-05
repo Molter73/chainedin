@@ -17,6 +17,10 @@ async function update_navbar() {
         let pic = profile.querySelector('img');
         pic.src = data.picture;
     }
+
+    if (data.type == "reclutador") {
+        document.getElementById("add-offer").style.display = "";
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function() {
