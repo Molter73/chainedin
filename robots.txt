@@ -1,0 +1,5 @@
+# De momento no permitimos indexado por robots.
+User-agent: *
+Disallow: /
+
+Sitemap: https://chainedin.com/sitemap.xml
