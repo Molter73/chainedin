@@ -6,14 +6,15 @@ async function update_profile(event) {
     const phone = document.getElementById("postPhone").value;
     const cv = document.getElementById("postCV").value;
     const pic = document.getElementById("upload-pic");
-    console.log(pic);
 
     let form_data = new FormData();
     form_data.set("name", name);
     form_data.set("surname", surname);
     form_data.set("phone", phone);
     form_data.set("CV", cv);
-    form_data.set("pic", pic.files[0]);
+    if (pic.value != "") {
+        form_data.set("pic", pic.files[0]);
+    }
 
     let response = await fetch("../php/profile.php", {
         method: "POST",

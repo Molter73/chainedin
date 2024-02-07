@@ -70,7 +70,7 @@ function update_profile($name, $surname, $phone, $CV) {
 
     $conn = db_connect();
 
-    $stmt = mysqli_prepare($conn, "UPDATE profiles SET name=?, surname=?, phone=?, picture=?, CV=? WHERE id=?;");
+    $stmt = mysqli_prepare($conn, "UPDATE profiles SET name=?, surname=?, phone=?, picture=IFNULL(?, picture), CV=? WHERE id=?;");
     mysqli_stmt_bind_param($stmt, "sssssi", $name, $surname, $phone, $pic, $CV, $_SESSION["user_id"]);
     if (!mysqli_stmt_execute($stmt)) {
         internal_error(DATABASE_QUERY_ERROR, mysqli_error());
