@@ -1,0 +1,245 @@
+\documentclass[a4paper]{article}
+
+\usepackage{titling}
+\usepackage{fullpage}
+\usepackage{fontenc}
+\usepackage{listings}
+\usepackage{mathptmx}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{parskip}
+\usepackage[none]{hyphenat}
+
+\renewcommand{\contentsname}{Contenidos}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\urlstyle{same}
+
+\begin{document}
+
+\title{ChainedIn}
+\author{Moltrasio, Mauro Ezequiel}
+\date{}
+\renewcommand{\abstractname}{\vspace{-\baselineskip}}
+
+\begin{titlingpage}
+    \maketitle
+    \begin{abstract}
+        Clase: Desarrollo Web y de Apps
+    \end{abstract}
+\end{titlingpage}
+
+\tableofcontents
+
+\section{Introducción}
+En este documento se detallará el proceso de diseño y desarrollo de un
+sitio web para búsqueda de empleo. El sitio en cuestión se desplegará en
+un entorno web, por lo que se deberá desarrollar un backend que permita la
+persistencia y recuperación de datos, y un frontend capaz de mostrar esta
+información de una manera amigable a usuarios.
+
+\section{Descripción del problema}
+
+El sitio en cuestión permitirá:
+\begin{itemize}
+    \item Crear nuevos usuarios con un rol específico (usuario o reclutador).
+    \item Para reclutadores:
+        \begin{itemize}
+            \item Crear anuncios para ofertas de empleo.
+            \item Recuperar la lista de empleos propios creados.
+            \item Visualizar perfiles de candidatos a las distintas ofertas.
+        \end{itemize}
+    \item Para usuarios:
+        \begin{itemize}
+            \item Visualizar todas las ofertas de empleo disponibles.
+            \item Postularse a distintas ofertas.
+            \item Obtener una lista de las ofertas a las que se encuentra postulado.
+            \item Editar su perfil.
+        \end{itemize}
+\end{itemize}
+
+Podemos convertir los puntos previos en diagramas de caso de uso para tener
+una mejor visualización:
+
+\begin{figure}[H]
+    \centering
+    \scalebox{.6}{
+        \input{build/uml.tex}
+    }
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \scalebox{.6}{
+        \input{build/uml_001.tex}
+    }
+\end{figure}
+
+Con estos diagramas de caso de uso, podemos ver que se tendrán dos tipos de
+usuario, como se detallaba en la sección anterior y que ambos deberán poder
+interactuar con los empleos disponibles pero de formas distintas. Así también
+está claro que ambas partes pueden visuarlizar perfiles de usuarios, pero
+sólo el reclutador puede ver los perfiles de otros usuarios.
+
+\section{Solución propuesta}
+Se propone implementar un sitio web que permita cumplir con los requisitos
+expuestos en los diagramas de caso de uso del punto anterior. Siguiendo
+las tendencias del desarrollo web moderno, se escribirá un frontend basado en
+HTML, CSS y JavaScript, apoyándose en el framework Bootstrap para simplificar
+la estructuración del sitio y aprovechando las capacidades responsivas del
+mismo. Para el backend, se utilizará MySQL para la persistencia de datos y
+PHP para el acceso a la misma y agregar la lógica de negocio adicional que
+fuese necesaria.
+
+\section{Arquitectura}
+\subsection{Base de datos}
+Empezaremos por el almacenamiento de datos. Se utilizará una base de datos SQL,
+por lo que podemos comenzar por plantear una distribución de tablas como la
+que se muestra a continuación:
+
+\includegraphics[scale=0.65]{imgs/db.png}
+
+Ahondando un poco en los detalles, cada usuario tendrá una entrada en la tabla
+users, la cual se utiliza para el ingreso en el sitio, por lo que tendrá el
+email del usuario como clave y su password hasheado. En esta tabla también se
+especificará el tipo de usuario que tenemos (reclutador o usuario) con un
+entero. Finalmente, cada usuario tendrá un id numérico que se utilizará para
+identificarlo de forma más sencilla.
+
+Asociado a cada usuario habrá también una entrada en la tabla profiles, la
+cual almacena detalles como nombres, apellidos, experiencia laboral, etc. Esta
+separación se realizó porque estos detalles en general sólo son necesarios
+cuando se consulta el perfil de usuario y no nos es útil en la mayor parte de
+la navegación del sitio, por lo que esta separación simplificaba las
+consultas a la DB.
+
+Se creará también una tabla para las vacantes de empleos llamada jobs. En la
+misma se guardarán el título del empleo, una descripción, la ubicación de un
+logo de la empresa que publica la oferta y la fecha de creación de la misma.
+Vemos también que se almacena la id de usuario del reclutador que creó la
+oferta, esto nos permitirá devolver las ofertas asociadas a un reclutador
+específico, para que este no deba navegar en la totalidad de empleos para
+llegar a sus vacantes.
+
+Finalmente, para llevar un registro de postulaciones, la tabla applicants
+guardará una lista que correlaciona ids de usuarios con ids de ofertas. Esto
+nos permite realizar uniones entre las tablas jobs, users y applicants para
+obtener distintos tipos de listados (postulantes a una oferta, ofertas a las
+que un usuario se ha postulado, etc.).
+
+\subsection{API}
+Para controlar el acceso a la base de datos, se utilizó PHP como intermediario
+para aplicar la lógica de negocio necesaria. Si bien PHP permite el renderizado
+de HTML, se optó por tener una separación entre el backend y el frontend lo más
+marcada posible, por lo tanto, los scripts de PHP sólo devuelven strings JSON
+con la información solicitada. También se optó por hacer que el backend carezca
+de estado, manteniendo la menor cantidad de información posible en la sesión de
+PHP, sólo se guarda el id y el tipo de usuario, estos datos son suficientes
+para validar que las peticiones provienen de un usuario autenticado y realizar
+algunos ajustes de comportamiento según si el usuario es reclutador o no.
+
+A continuación podemos ver el diagrama de secuencia de un ejemplo de petición a
+la API:
+\begin{figure}[H]
+    \centering
+    \scalebox{.6}{
+        \input{build/uml_002.tex}
+    }
+\end{figure}
+
+Los scripts principales del backend son los siguientes:
+\begin{itemize}
+    \item signup.php:
+        \begin{itemize}
+            \item POST: Permite la creación de usuario junto con datos de perfil.
+        \end{itemize}
+    \item login.php:
+        \begin{itemize}
+            \item POST: Realiza el inicio de sesión para el email y
+                contraseña provistos.
+            \item GET: Verifica si la petición tiene una sesión válida iniciada.
+        \end{itemize}
+    \item jobs.php:
+        \begin{itemize}
+            \item POST: Permite la creación de nuevas vacantes.
+            \item GET: Obtiene vacantes abiertas, paginadas y ordenadas por
+                fecha de creación. Si el usuario es un reclutador, se limitan
+                los resultados a posiciones creadas por el reclutador. Si se
+                provee un id, devuelve sólo los datos de la oferta con ese id.
+        \end{itemize}
+    \item profile.php:
+        \begin{itemize}
+            \item POST: Permite la actualización de datos del perfil.
+            \item GET: Devuelve la información del perfil solicitado.
+        \end{itemize}
+    \item apply.php:
+        \begin{itemize}
+            \item POST: Permite que un usuario presente su candidatura a una
+                oferta.
+        \end{itemize}
+\end{itemize}
+
+\subsection{Frontend}
+
+La parte final de la solución consiste en un frontend implementado con HTML,
+CSS y JavaScript. Estas tres tecnologías están fuertemente establecidas como el
+estándar para generación de páginas web. Para simplificar la tarea de estilizar
+las páginas y volverlas responsivas, se decidió utilizar Bootstrap en su
+versión 5.0. Inicialmente se evalúo la utilización de JQuery como librería
+adicional, pero fue descartado en favor de utilizar JavaScript directamente,
+ya que en sus versiones más recientes se ha simplificado mucho su uso y las
+tareas a realizar no requerían de las abstracciones de JQuery.
+
+Las páginas que se desarrollaron son:
+
+\begin{itemize}
+    \item Login: Permite el inicio de sesión de usuarios.
+    \item Sign Up: Permite la creación de nuevos usuarios.
+    \item Listado Ofertas: Muestra las vacantes de trabajos a usuarios. En caso
+        de ser el usuario un reclutador, se muestran sólo las ofertas generadas
+        por el mismo.
+    \item Oferta: Muestra los detalles de una oferta y permite a usuarios el
+        postularse a la misma. Para reclutadores, muestra una lista de
+        candidatos.
+    \item Perfil: Muestra detalles del perfil de un usuario. En caso de ser un
+        usuario normal viendo su propio perfil, se muestra una lista de
+        ofertas a las que se ha postulado.
+    \item Edición de perfil: Permite editar detalles de un perfil de usuario.
+\end{itemize}
+
+Cabe destacar que en los casos de páginas con funcionalidades mixtas, basadas
+en diferencias como tipo de usuario y coincidencia o no del id de usuario, la
+lógica del frontend es manejada por el backend. Por ejemplo, cuando decimos
+que en la página de ofertas se muestran todas las ofertas para usuarios o las
+creadas por un reclutador para el reclutador, es el backend el que decide qué
+ofertas se deben enviar, el frontend puede o no tener lógica particular para
+manejar alguno de estos casos, pero siempre es el backend el que ejerce la
+lógica de negocio y decide qué operaciones están o no admitidas en cada
+situación. Esto se realizó de esta manera porque el frontend termina siendo
+una forma "cómoda" para usuarios de realizar consultas HTTP, usuarios más
+experimentados podrían utilizar las herramientas de desarrollador de los
+navegadores para mostrar botones a los que no deberían tener acceso o hacer uso
+de utilidades como cURL o PostMan para consultar al backend directamente, por
+lo que es este último el que debe tomar estas decisiones.
+
+\section{Conclusiones}
+Mediante el uso de tecnologías establecidas y probadas, se ha podido
+implementar una solución funcional y robusta al problema de crear una web de
+búsqueda de empleos. Si bien en el mercado hay tecnologías más nuevas como ser
+React.js para el frontend o la posibilidad de utilizar lenguajes como Python o
+Go para el backend, HTMl, CSS, JavaScript, PHP y MySQL aún hoy demuestran ser
+buenas alternativas para el prototipado rápido de aplicaciones y las librerías
+como Bootstrap simplifican mucho la tarea de desarrolladores con menos
+experiencia.
+
+Si bien la solución final implementada no es perfecta, sería un buen punto de
+partida para el desarrollo de una web más compleja y productiva.
+
+\end{document}

@@ -3,3 +3,6 @@
 
 # Uploaded images
 imgs/
+
+# Build directory for docs
+build/
